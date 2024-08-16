@@ -17,12 +17,13 @@ public class Game extends Canvas implements Runnable {
 	public static final int HEIGHT = WIDTH / 12 * 9;
 	public static final int SCALE = 2;
 	public final String TITLE = "Space War 2D";
+        String GrMode= "Sprites";
+        //String GrMode= "Vectorial";
+        //String GrMode= "Color";
 	
 	private boolean running = false;
 	private Thread thread;
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-	
-	
 	private SpritesImageLoader sprites;
 	
 	//Game components
@@ -49,9 +50,22 @@ public class Game extends Canvas implements Runnable {
 		
 		
 		// Set player position at the bottom center.
-		player = new Player((WIDTH * SCALE - Player.WIDTH) / 2, HEIGHT * SCALE - 50 , this);
-		bullets = new BulletController();
-		backgRenderer=new BackgroundRenderer();
+                if(GrMode == "Sprites")
+                {
+		player = new SPlayer((WIDTH * SCALE - Player.WIDTH) / 2, HEIGHT * SCALE - 50 , this);
+		bullets = new SBulletController();
+		backgRenderer=new SRender();
+                }else if(GrMode == "Vectorial")
+                {
+                player = new VPlayer((WIDTH * SCALE - Player.WIDTH) / 2, HEIGHT * SCALE - 50 , this);
+		bullets = new VBulletController();
+		backgRenderer=new VRender();
+                }else
+                {
+                player = new CPlayer((WIDTH * SCALE - Player.WIDTH) / 2, HEIGHT * SCALE - 50 , this);
+		bullets = new CBulletController();
+		backgRenderer=new CRender();
+                }
 	}
 
 	public SpritesImageLoader getSprites(){
@@ -174,6 +188,7 @@ public class Game extends Canvas implements Runnable {
 	public void tick(){
 		player.tick();
 		bullets.tick();
+                
 	}
 	
 	/*
@@ -188,15 +203,9 @@ public class Game extends Canvas implements Runnable {
 		
 		Graphics g = bs.getDrawGraphics();
 		/////////////////////////////////
-		
-		try {
-			backgRenderer.render(g, this);
-			player.render(g);
-			bullets.render(g);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+                backgRenderer.render(g, this);
+                player.render(g);
+                bullets.render(g);
 		
 		
 		

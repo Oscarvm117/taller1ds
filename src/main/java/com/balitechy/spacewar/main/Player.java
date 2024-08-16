@@ -4,26 +4,24 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class Player {
+public abstract class Player {
 	
-	private double x;
-	private double y;
+	double x;
+	double y;
 	
-	private double velX;
-	private double velY;
+	double velX;
+	double velY;
 	
 	public static final int WIDTH = 56;
 	public static final int HEIGHT = 28;
 	
-	private BufferedImage image;
-	private Game game;
+	BufferedImage image;
+	Game game;
 	
 	public Player(double x, double y, Game game){
 		this.x = x;
 		this.y = y;
-		this.game = game;
-		
-		// Get image for Player		
+		this.game = game;	
 		image = game.getSprites().getImage(219, 304, WIDTH, HEIGHT);
 	}
 	
@@ -51,12 +49,9 @@ public class Player {
 		this.velY = velY;
 	}
 	
-	public void shoot(){
-		Bullet b = new Bullet(x+(WIDTH/2)-5, y-18, game);
-		game.getBullets().addBullet(b);
-	}
+	public abstract void shoot();
 
-	public void tick(){
+        public void tick(){
 		x += velX;
 		y += velY;
 		
@@ -71,8 +66,5 @@ public class Player {
 			y = (Game.HEIGHT * Game.SCALE) - HEIGHT;
 	}
 	
-	public void render(Graphics g){
-		g.setColor(Color.white);
-		g.drawImage(image, (int) x, (int) y, null);
-	}
+	public abstract void render(Graphics g);
 }
